@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "hunting-tool",
+    "slug": "hunting-tool",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We use your location to drop pins and show your position on the map.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "We record your path in the background when tracking is on.",
+        "UIBackgroundModes": [
+          "location",
+          "location"
+        ]
+      },
+      "supportsTablet": true,
+      "bundleIdentifier": "com.micheletighe.hunting-tool"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE"
+      ],
+      "package": "com.micheletighe.huntingtool"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-sqlite",
+      "@maplibre/maplibre-react-native"
+    ]
+  }
+}

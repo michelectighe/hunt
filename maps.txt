@@ -1,0 +1,261 @@
+# qgis_wmu_export.py
+# Run this inside QGIS (Plugins → Python Console → Show Editor → Open this file → Run).
+# It prepares clean region/unit boundaries, assigns parcels to units,
+# and exports one file per unit organized by region folders.
+
+import os
+from pathlib import Path
+
+try:
+    from qgis.core import QgsProject
+    import processing
+except Exception as e:
+    print("This script must be run inside QGIS (Plugins → Python Console).")
+    raise
+
+# -------------------------------
+# CONFIG — EDIT THESE
+# -------------------------------
+PARCELS_LAYER_NAME = "Parcels"         # e.g., "parcels"
+REGIONS_LAYER_NAME = "WMU_Regions"     # e.g., "wmu_regions"
+UNITS_LAYER_NAME   = "WMU_Units"       # e.g., "wmu_units"
+
+REGION_ID_FIELD = "REGION_ID"          # field on regions AND units
+UNIT_ID_FIELD   = "UNIT_ID"            # field on units; unique per unit
+
+# CRS to process in (meters). BC Albers (EPSG:3005) is a good default for BC.
+TARGET_CRS = "EPSG:3005"
+
+# Minimum area (m²) to keep parcel pieces after intersection (filters tiny slivers)
+MIN_AREA_KEEP = 1.0
+
+# Where to write outputs
+OUTPUT_BASE = r"C:\michele\hunting\app\qgis_wmu_export" 
+# -------------------------------
+
+
+# Helpers
+def layer_by_name(name):
+    lst = QgsProject.instance().mapLayersByName(name)
+    if not lst:
+        raise ValueError(f"Layer not found in project: {name}")
+    return lst[0]
+
+def ensure_dir(p):
+    Path(p).mkdir(parents=True, exist_ok=True)
+
+def out(path):
+    ensure_dir(os.path.dirname(path))
+    return path
+
+# Fetch inputs
+parcels = layer_by_name(PARCELS_LAYER_NAME)
+regions = layer_by_name(REGIONS_LAYER_NAME)
+units   = layer_by_name(UNITS_LAYER_NAME)
+
+# Paths
+BOUNDARIES_DIR = os.path.join(OUTPUT_BASE, "boundaries")
+PARCELS_DIR    = os.path.join(OUTPUT_BASE, "parcels")
+PER_UNIT_DIR   = os.path.join(OUTPUT_BASE, "per_unit")
+INDICES_DIR    = os.path.join(OUTPUT_BASE, "indices")
+
+for d in [BOUNDARIES_DIR, PARCELS_DIR, PER_UNIT_DIR, INDICES_DIR]:
+    ensure_dir(d)
+
+# 0) Reproject to TARGET_CRS
+def reproject(layer, name):
+    return processing.run(
+        "native:reprojectlayer",
+        {
+            "INPUT": layer,
+            "TARGET_CRS": TARGET_CRS,
+            "OPERATION": "",
+            "OUTPUT": f"memory:{name}_reproj"
+        }
+    )["OUTPUT"]
+
+parcels_r = reproject(parcels, "parcels")
+regions_r = reproject(regions, "regions")
+units_r   = reproject(units,   "units")
+
+# 1) Fix geometries
+def fix_geom(layer, name):
+    return processing.run(
+        "native:fixgeometries",
+        {"INPUT": layer, "OUTPUT": f"memory:{name}_fixed"}
+    )["OUTPUT"]
+
+parcels_f = fix_geom(parcels_r, "parcels")
+regions_f = fix_geom(regions_r, "regions")
+units_f   = fix_geom(units_r,   "units")
+
+# 2) Create spatial indexes
+for lyr in [parcels_f, regions_f, units_f]:
+    processing.run("native:createspatialindex", {"INPUT": lyr})
+
+# 3) Dissolve regions by REGION_ID
+regions_d = processing.run(
+    "native:dissolve",
+    {
+        "INPUT": regions_f,
+        "FIELD": [REGION_ID_FIELD],
+        "SEPARATE_DISJOINT": False,
+        "STATISTICS": [],
+        "OUTPUT": out(os.path.join(BOUNDARIES_DIR, "regions.gpkg"))
+    }
+)["OUTPUT"]
+
+# Regions boundary lines
+processing.run(
+    "native:polygonstolines",
+    {
+        "INPUT": regions_d,
+        "OUTPUT": out(os.path.join(BOUNDARIES_DIR, "regions_lines.gpkg"))
+    }
+)
+
+# 4) Dissolve units by UNIT_ID
+units_d = processing.run(
+    "native:dissolve",
+    {
+        "INPUT": units_f,
+        "FIELD": [UNIT_ID_FIELD],
+        "SEPARATE_DISJOINT": False,
+        "STATISTICS": [],
+        "OUTPUT": out(os.path.join(BOUNDARIES_DIR, "units_raw.gpkg"))
+    }
+)["OUTPUT"]
+
+# 4a) Reattach REGION_ID to dissolved units
+units_joined = processing.run(
+    "native:joinattributestable",
+    {
+        "INPUT": units_d,
+        "FIELD": UNIT_ID_FIELD,
+        "INPUT_2": units_f,
+        "FIELD_2": UNIT_ID_FIELD,
+        "FIELDS_TO_COPY": [REGION_ID_FIELD],
+        "METHOD": 1,  # Take attributes of the first matching feature
+        "DISCARD_NONMATCHING": False,
+        "PREFIX": "",
+        "OUTPUT": out(os.path.join(BOUNDARIES_DIR, "units.gpkg"))
+    }
+)["OUTPUT"]
+
+# Units boundary lines
+processing.run(
+    "native:polygonstolines",
+    {
+        "INPUT": units_joined,
+        "OUTPUT": out(os.path.join(BOUNDARIES_DIR, "units_lines.gpkg"))
+    }
+)
+
+# 5) Parcels ∩ Units: clip and carry UNIT_ID/REGION_ID over
+parcels_by_unit = processing.run(
+    "native:intersection",
+    {
+        "INPUT": parcels_f,
+        "OVERLAY": units_joined,
+        "INPUT_FIELDS": [],
+        "OVERLAY_FIELDS": [UNIT_ID_FIELD, REGION_ID_FIELD],
+        "OVERLAY_FIELDS_PREFIX": "",
+        "OUTPUT": out(os.path.join(PARCELS_DIR, "parcels_by_unit.gpkg"))
+    }
+)["OUTPUT"]
+
+# 6) Add area and filter tiny slivers
+parcels_by_unit_area = processing.run(
+    "qgis:exportaddgeometrycolumns",
+    {
+        "INPUT": parcels_by_unit,
+        "CALC_METHOD": 0,  # Layer CRS
+        "OUTPUT": "memory:parcels_by_unit_area"
+    }
+)["OUTPUT"]
+
+expr = f'"area" >= {MIN_AREA_KEEP}'
+parcels_by_unit_clean = processing.run(
+    "native:extractbyexpression",
+    {
+        "INPUT": parcels_by_unit_area,
+        "EXPRESSION": expr,
+        "OUTPUT": out(os.path.join(PARCELS_DIR, "parcels_by_unit_clean.gpkg"))
+    }
+)["OUTPUT"]
+
+# 7) Split into one file per Unit, organized into region folders
+# First, ensure index on parcels_by_unit_clean
+processing.run("native:createspatialindex", {"INPUT": parcels_by_unit_clean})
+
+# Build a temporary folder for split (QGIS writes all files to one dir)
+TEMP_SPLIT_DIR = os.path.join(PER_UNIT_DIR, "_temp_split")
+ensure_dir(TEMP_SPLIT_DIR)
+processing.run(
+    "native:splitvectorlayer",
+    {
+        "INPUT": parcels_by_unit_clean,
+        "FIELD": UNIT_ID_FIELD,
+        "FILE_TYPE": 7,  # GeoPackage
+        "OUTPUT": TEMP_SPLIT_DIR
+    }
+)
+
+# Move each unit file into a region folder, renaming to unit_<UNITID>_parcels.gpkg
+import glob
+for gpkg_path in glob.glob(os.path.join(TEMP_SPLIT_DIR, "*.gpkg")):
+    unit_id = Path(gpkg_path).stem
+    # Find REGION_ID from units_joined
+    unit_row = processing.run(
+        "native:extractbyattribute",
+        {
+            "INPUT": units_joined,
+            "FIELD": UNIT_ID_FIELD,
+            "OPERATOR": 0,  # "="
+            "VALUE": unit_id,
+            "OUTPUT": "memory:one_unit"
+        }
+    )["OUTPUT"]
+    it = unit_row.getFeatures()
+    feat = next(it, None)
+    region_id = "unknown" if feat is None else str(feat[REGION_ID_FIELD])
+
+    region_folder = os.path.join(PER_UNIT_DIR, f"region_{region_id}")
+    ensure_dir(region_folder)
+    final_path = os.path.join(region_folder, f"unit_{unit_id}_parcels.gpkg")
+    if os.path.exists(final_path):
+        os.remove(final_path)
+    os.replace(gpkg_path, final_path)
+
+# Cleanup temp dir
+import shutil
+shutil.rmtree(TEMP_SPLIT_DIR, ignore_errors=True)
+
+# 8) Build a tiny units index (UNIT_ID, REGION_ID, xmin,ymin,xmax,ymax) as GeoJSON
+units_bbox = processing.run(
+    "qgis:exportaddgeometrycolumns",
+    {
+        "INPUT": units_joined,
+        "CALC_METHOD": 0,  # Layer CRS
+        "OUTPUT": "memory:units_bbox_tmp"
+    }
+)["OUTPUT"]
+
+# Keep only the needed fields
+units_index = processing.run(
+    "native:refactorfields",
+    {
+        "INPUT": units_bbox,
+        "FIELDS_MAPPING": [
+            {"expression": f'"{UNIT_ID_FIELD}"', "length": 80, "name": UNIT_ID_FIELD, "precision": 0, "type": 10},
+            {"expression": f'"{REGION_ID_FIELD}"', "length": 80, "name": REGION_ID_FIELD, "precision": 0, "type": 10},
+            {"expression": '"xmin"', "length": 0, "name": "xmin", "precision": 6, "type": 6},
+            {"expression": '"ymin"', "length": 0, "name": "ymin", "precision": 6, "type": 6},
+            {"expression": '"xmax"', "length": 0, "name": "xmax", "precision": 6, "type": 6},
+            {"expression": '"ymax"', "length": 0, "name": "ymax", "precision": 6, "type": 6},
+        ],
+        "OUTPUT": out(os.path.join(INDICES_DIR, "units_index.geojson"))
+    }
+)["OUTPUT"]
+
+print("✅ Done. Outputs written under:", OUTPUT_BASE)

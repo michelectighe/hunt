@@ -1,0 +1,14 @@
+{
+  "version": 8,
+  "name": "offline-basic",
+  "sources": {},
+   "text-font": ["Noto Sans Regular"],
+"glyphs": "asset://glyphs/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": { "background-color": "#f7f7f7" }
+    }
+  ]
+}
