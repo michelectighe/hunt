@@ -1,0 +1,16 @@
+{
+"name": "lakes.mbtiles",
+"description": "lakes.mbtiles",
+"version": "2",
+"minzoom": "5",
+"maxzoom": "12",
+"center": "-130.034180,53.357101,12",
+"bounds": "-138.106427,49.230154,-114.793396,60.011344",
+"antimeridian_adjusted_bounds": "-138.106427,49.230154,-114.793396,60.011344",
+"type": "overlay",
+"strategies": "[{},{},{},{},{},{\"tiny_polygons\":1287},{\"tiny_polygons\":421},{\"tiny_polygons\":100},{\"tiny_polygons\":18},{\"tiny_polygons\":4},{\"tiny_polygons\":4},{\"tiny_polygons\":4},{\"tiny_polygons\":2}]",
+"format": "pbf",
+"generator": "tile-join v2.79.0",
+"generator_options": "tippecanoe -o lakes.mbtiles '--minimum-zoom=5' '--maximum-zoom=12' -P -f -L lakes:lakes.geojson; tile-join -e lakes --no-tile-compression -f lakes.mbtiles",
+"json": "{\"vector_layers\":[{\"id\":\"lakes\",\"description\":\"\",\"minzoom\":5,\"maxzoom\":12,\"fields\":{\"LAKE_NAME\":\"String\"}}],\"tilestats\":{\"layerCount\":1,\"layers\":[{\"layer\":\"lakes\",\"count\":42705,\"geometry\":\"Polygon\",\"attributeCount\":1,\"attributes\":[{\"attribute\":\"LAKE_NAME\",\"count\":1000,\"type\":\"string\",\"values\":[\"101 MILE LAKE\",\"103 MILE LAKE\",\"105 MILE LAKE\",\"108 MILE LAKE\",\"130 MILE LAKE\",\"180 LAKE\",\"28 MILE LAKE\",\"ABA LAKE\",\"ABAS LAKE\",\"ABBOTT LAKE\",\"ABBS LAKE\",\"ABEL LAKE\",\"ABERYSTWYTH LAKE\",\"ABETIBIE LAKE\",\"ABRAMS LAKE\",\"ABRUZZI LAKE\",\"ABUNTLET LAKE\",\"ACADEMUS LAKE\",\"ACONITUM LAKE\",\"ACORN LAKE\",\"ADAM LAKE\",\"ADAMS LAKE\",\"ADELAIDE LAKE\",\"ADLER LAKE\",\"ADRIAN LAKE\",\"ADSIT LAKE\",\"AEROPLANE LAKE\",\"AFFLECK LAKE\",\"AGNES LAKE\",\"AGNUS LAKE\",\"AGODAK LAKE\",\"AH CLEM LAKE\",\"AH LOCK LAKE\",\"AHBAU LAKE\",\"AHDATAY LAKE\",\"AID LAKE\",\"AIKEN LAKE\",\"AILPORT LAKE\",\"AIN LAKE\",\"AIRD LAKE\",\"AIRLINE LAKE\",\"AIRPLANE LAKE\",\"AKEHURST LAKE\",\"AKTAKLIN LAKE\",\"AKUS LAKE\",\"ALAH LAKE\",\"ALANA LAKE\",\"ALANS LAKE\",\"ALASTAIR LAKE\",\"ALBERT LAKE\",\"ALBERTA LAKE\",\"ALBREDA LAKE\",\"ALCOCK LAKE\",\"ALDER LAKE\",\"ALDRICH LAKE\",\"ALEC CHIEF LAKE\",\"ALEECE LAKE\",\"ALEX GRAHAM LAKE\",\"ALEX LAKE\",\"ALEXANDER LAKE\",\"ALEXIS LAKE\",\"ALEZA LAKE\",\"ALF LAKE\",\"ALFORD LAKE\",\"ALGA POND\",\"ALICE LAKE\",\"ALINE LAKE\",\"ALIX LAKES\",\"ALIXTON LAKE\",\"ALKALI LAKE\",\"ALKALI LAKES\",\"ALLAN B LAKE\",\"ALLAN LAKE\",\"ALLARD LAKE\",\"ALLARDYCE LAKE\",\"ALLIE LAKE\",\"ALPHA LAKE\",\"ALPHEUS LAKE\",\"ALPINE LAKE\",\"ALTRUIST LAKE\",\"ALTY LAKE\",\"ALVIN LAKE\",\"ALWYN LAKE\",\"AMANITA LAKE\",\"AMISK LAKE\",\"AMISKWI LAKE\",\"AMOTH LAKE\",\"AMY LAKE\",\"ANAH LAKE\",\"ANAHIM LAKE\",\"ANCHOR LAKE\",\"ANDERS LAKE\",\"ANDERSON LAKE\",\"ANDREW LAKE\",\"ANDROS LAKE\",\"ANDRUS LAKE\",\"ANDY BAILEY LAKE\",\"ANDY LAKE\",\"ANGEL LAKE\",\"ANGLER LAKE\"]}]}]}}"
+}

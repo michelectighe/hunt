@@ -14,16 +14,17 @@ export default function HillshadeLayer({
   const tiles = ["asset://tiles/hillshade/{z}/{x}/{y}.png"];
 
   return (
-    <RasterSource id="hillshade" tileUrlTemplates={tiles} tileSize={256}>
+    <RasterSource
+      id="hillshade"
+      tileUrlTemplates={["asset://tiles/hillshade/{z}/{x}/{y}.png"]}
+      tileSize={256}
+      minZoomLevel={5}
+      maxZoomLevel={12}
+    >
       <RasterLayer
         id="hillshade-layer"
-        style={{
-          rasterOpacity: opacity,
-          rasterResampling: "linear",
-          visibility: visible ? "visible" : "none",
-        }}
-        minZoomLevel={minZoom}
-        maxZoomLevel={maxZoom}
+        sourceID="hillshade"
+        style={{ rasterOpacity: 0.55 }}
       />
     </RasterSource>
   );

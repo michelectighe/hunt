@@ -18,7 +18,7 @@ import {
   MoonPhase,
 } from "../components/filters/MoonPhaseFilterList";
 
-function emojiForPhase(name: string): string {
+function emojiForPhase(name) {
   switch (name) {
     case "New Moon":
       return "🌑";
@@ -41,7 +41,7 @@ function emojiForPhase(name: string): string {
   }
 }
 
-function getDisplayMoon(p: Pin) {
+function getDisplayMoon(p) {
   if (p.moonPhase && p.moonIllum != null) {
     return {
       name: p.moonPhase,

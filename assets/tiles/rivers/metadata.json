@@ -1,0 +1,16 @@
+{
+"name": "rivers.mbtiles",
+"description": "rivers.mbtiles",
+"version": "2",
+"minzoom": "5",
+"maxzoom": "12",
+"center": "-128.276367,55.652790,12",
+"bounds": "-138.588409,48.922499,-114.632721,60.000359",
+"antimeridian_adjusted_bounds": "-138.588409,48.922499,-114.632721,60.000359",
+"type": "overlay",
+"strategies": "[{},{},{},{},{},{\"tiny_polygons\":3},{\"tiny_polygons\":2},{\"tiny_polygons\":7},{\"tiny_polygons\":5},{\"tiny_polygons\":6},{\"tiny_polygons\":6},{\"tiny_polygons\":13},{\"tiny_polygons\":21}]",
+"format": "pbf",
+"generator": "tile-join v2.79.0",
+"generator_options": "tippecanoe -o rivers.mbtiles '--minimum-zoom=5' '--maximum-zoom=12' -P -f -L rivers:rivers.geojson; tile-join -e rivers --no-tile-compression -f rivers.mbtiles",
+"json": "{\"vector_layers\":[{\"id\":\"rivers\",\"description\":\"\",\"minzoom\":5,\"maxzoom\":12,\"fields\":{\"RIVER_NAME\":\"String\"}}],\"tilestats\":{\"layerCount\":1,\"layers\":[{\"layer\":\"rivers\",\"count\":126574,\"geometry\":\"Polygon\",\"attributeCount\":1,\"attributes\":[{\"attribute\":\"RIVER_NAME\",\"count\":1000,\"type\":\"string\",\"values\":[\"111 MILE CREEK\",\"AALTANHASH RIVER\",\"ABBOTT CREEK\",\"ABESTI CREEK\",\"ABIES CREEK\",\"ABRAHAM CREEK\",\"ABRUZZI CREEK\",\"ACONITUM CREEK\",\"ADAM RIVER\",\"ADAMS CREEK\",\"ADAMS RIVER\",\"ADOLPH CREEK\",\"ADOOGACHO CREEK\",\"ADSETT CREEK\",\"ADSIT CREEK\",\"ADSKWATIM CREEK\",\"AHBAU CREEK\",\"AHDATAY CREEK\",\"AHNUHATI RIVER\",\"AHTA RIVER\",\"AIKMAN CREEK\",\"AILPORT CREEK\",\"AIN RIVER\",\"AIRPLANE CREEK\",\"AITKEN CREEK\",\"AKIE RIVER\",\"AKIEKA CREEK\",\"AKIMUKOO CREEK\",\"AKLUKY CREEK\",\"AKOLKOLEX RIVER\",\"AKOO CREEK\",\"AKUE CREEK\",\"AKUNAM CREEK\",\"ALAN CREEK\",\"ALBERT CREEK\",\"ALBERT RIVER\",\"ALBREDA RIVER\",\"ALCANTARA CREEK\",\"ALCES RIVER\",\"ALDER CREEK\",\"ALDRIDGE CREEK\",\"ALEC CHIEF CREEK\",\"ALEX CREEK\",\"ALEXANDER CREEK\",\"ALEXIS CREEK\",\"ALEY CREEK\",\"ALFORD CREEK\",\"ALGARD CREEK\",\"ALGER CREEK\",\"ALICE CREEK\",\"ALIX CREEK\",\"ALKALI CREEK\",\"ALKIE CREEK\",\"ALLAIRE CREEK\",\"ALLAN CREEK\",\"ALLARD CREEK\",\"ALLARDYCE CREEK\",\"ALLEN CREEK\",\"ALLIN CREEK\",\"ALMA CREEK\",\"ALPHA CREEK\",\"ALSEK RIVER\",\"ALTEZEGA CREEK\",\"ALUK CREEK\",\"ALVIN CREEK\",\"ALWYN CREEK\",\"AMBUSTEN CREEK\",\"AMERICAN CREEK\",\"AMES CREEK\",\"AMISKWI RIVER\",\"AMOTH CREEK\",\"AMSBURY CREEK\",\"AMY CREEK\",\"ANAHIM CREEK\",\"ANDERSON CREEK\",\"ANDI CREEK\",\"ANDREA CREEK\",\"ANDREWS CREEK\",\"ANEKO CREEK\",\"ANGLY CREEK\",\"ANGUS HORNE CREEK\",\"ANGUSMAC CREEK\",\"ANKITREE CREEK\",\"ANKWILL CREEK\",\"ANLIYEN CREEK\",\"ANSEDAGAN CREEK\",\"ANSTEY RIVER\",\"ANTHONY CREEK\",\"ANTIGONISH CREEK\",\"ANTLER CREEK\",\"ANTOINE CREEK\",\"ANTONSON CREEK\",\"ANUDOL CREEK\",\"ANUK RIVER\",\"ANYOX CREEK\",\"ANZAC RIVER\",\"APE CREEK\",\"APPLE RIVER\",\"APPLESPRING CREEK\",\"APSASSIN CREEK\"]}]}]}}"
+}

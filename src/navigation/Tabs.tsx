@@ -4,9 +4,13 @@ import MapScreen from "../screens/MapScreen";
 import TestMap from "../screens/TestMap";
 import LogbookScreen from "../screens/LogbookScreen";
 import SettingsScreen from "../screens/SettingsScreen";
+import MapRegionsDownloadScreen from "../screens/MapRegionsDownloadScreen";
 import TrackScreen from "../screens/TrackScreen";
 import { Ionicons } from "@expo/vector-icons";
 import TrackStack from "./TrackStack";
+import UnitsByRegionScreen from "../screens/UnitsByRegion";
+
+import TestPacksScreen from "../screens/TestPackScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -21,8 +25,35 @@ export default function Tabs() {
       }}
     >
       <Tab.Screen
-        name="Map"
+        name="Select"
+        component={UnitsByRegionScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="map-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="ALL"
         component={TestMap}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="map-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Map"
+        component={MapRegionsDownloadScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="map-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Map2"
+        component={TestPacksScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="map-outline" color={color} size={size} />

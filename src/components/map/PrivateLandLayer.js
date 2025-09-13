@@ -7,6 +7,8 @@ import {
   SymbolLayer,
 } from "@maplibre/maplibre-react-native";
 
+import { fileTemplate } from "../../utils/fileTemplates";
+
 export default function PrivateLandLayer({
   visible = true,
   minZoom = 0,
@@ -15,12 +17,13 @@ export default function PrivateLandLayer({
   if (!visible) return null;
 
   return (
-    <VectorSource
+    <VectorSource id="privateland" tileUrlTemplates={[fileTemplate("fown_province","pbf")]}>
+    {/* <VectorSource
       id="privateland"
       tileUrlTemplates={["asset://tiles/fown/{z}/{x}/{y}.pbf"]}
       minZoomLevel={0}
       maxZoomLevel={22}
-    >
+    > */}
       <FillLayer
         id="privateland-fill"
         sourceID="privateland"
