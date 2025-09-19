@@ -1,74 +1,49 @@
-// src/components/map/PublicLandLayer.js
+// src/components/map/RiversLayer.js
 import React from "react";
-import {
-  VectorSource,
-  FillLayer,
-  LineLayer,
-  SymbolLayer,
-} from "@maplibre/maplibre-react-native";
+import { LineLayer, SymbolLayer } from "@maplibre/maplibre-react-native";
 
 export default function RiversLayer({
   visible = true,
-  minZoom = 0,
-  maxZoom = 22,
+  aboveLayerID,
+  belowLayerID,
 }) {
-  if (!visible) return null;
+//  if (!visible) return null;
+
+  const SOURCE_ID = "rivers-src";
+  const SOURCE_LAYER = "rivers";
 
   return (
-    <VectorSource
-      id="rivers"
-      tileUrlTemplates={["asset://tiles/rivers/{z}/{x}/{y}.pbf"]}
-      minZoomLevel={0}
-      maxZoomLevel={22}
-    >
-      {/* <FillLayer
-        id="rivers-fill"
-        sourceID="rivers"
-        sourceLayerID="rivers" // ← matches tippecanoe -L land_type:...
-        style={{
-          fillColor: [
-            "match",
-            ["get", "RIVER_NAME"], // ← property name is UPPERCASE in your tiles
-            "",
-            "blue",
-            "blue",
-          ],
-          fillOpacity: 0.35,
-        }}
-        minZoomLevel={minZoom}
-        maxZoomLevel={maxZoom}
-      /> */}
-
+    <>
       <LineLayer
-        id="rivers-outline"
-        sourceID="rivers"
-        sourceLayerID="rivers"
-        style={{ lineColor: "blue", lineWidth: 0.5, lineOpacity: 0.7 }}
-        minZoomLevel={minZoom}
-        maxZoomLevel={maxZoom}
+        id="rivers-line"
+        sourceID={SOURCE_ID}
+        sourceLayerID={SOURCE_LAYER}
+        style={{
+          visibility: visible ? "visible" : "none",
+          lineColor: "#2980b9",
+          lineWidth: 1.2,
+          lineOpacity: 0.9,
+        }}
+        aboveLayerID={aboveLayerID}
+        belowLayerID={belowLayerID}
       />
-      {/* Labels */}
       <SymbolLayer
         id="rivers-label"
-        sourceID="rivers"
-        sourceLayerID="rivers"
-        minZoomLevel={7} // show labels from z7+ (tweak as you like)
-        maxZoomLevel={22}
+        sourceID={SOURCE_ID}
+        sourceLayerID={SOURCE_LAYER}
         style={{
-          symbolPlacement: "line-center",
-          textField: ["get", "RIVER_NAME"], // field is UPPERCASE in your tiles
-          textTransform: "uppercase",
-          textSize: ["interpolate", ["linear"], ["zoom"], 7, 10, 12, 14],
+          visibility: visible ? "visible" : "none",
+          symbolPlacement: "line",
+          textField: ["get", "RIVER_NAME"],
+          textSize: 12,
           textColor: "#111",
+          textHaloColor: "#fff",
+          textHaloWidth: 1,
           textFont: ["Noto Sans Regular"],
-          textHaloColor: "#ffffff",
-          textHaloWidth: 1.2,
-          textAllowOverlap: false,
-          textIgnorePlacement: false,
-          textOptional: true,
-          textRadialOffset: 0.2,
         }}
+        aboveLayerID={aboveLayerID}
+        belowLayerID={belowLayerID}
       />
-    </VectorSource>
+    </>
   );
 }

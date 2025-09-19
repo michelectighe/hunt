@@ -1,74 +1,62 @@
-// src/components/map/PublicLandLayer.js
+// src/components/map/FirstNationsLayer.js
 import React from "react";
-import {
-  VectorSource,
-  FillLayer,
-  LineLayer,
-  SymbolLayer,
-} from "@maplibre/maplibre-react-native";
+import { FillLayer, LineLayer, SymbolLayer } from "@maplibre/maplibre-react-native";
 
-export default function FirstNationsLayer({
-  visible = true,
-  minZoom = 0,
-  maxZoom = 22,
-}) {
-  if (!visible) return null;
+export default function FirstNationsLayer({ visible = true, aboveLayerID, belowLayerID }) {
+   // if (!visible) return null;
+
+  const SOURCE_ID = "fn-src";
+  const SOURCE_LAYER = "fn"; // confirm internal layer name
 
   return (
-    <VectorSource
-      id="fn"
-      tileUrlTemplates={["asset://tiles/fn/{z}/{x}/{y}.pbf"]}
-      minZoomLevel={0}
-      maxZoomLevel={22}
-    >
+    <>
       <FillLayer
         id="fn-fill"
-        sourceID="fn"
-        sourceLayerID="fn" // ← matches tippecanoe -L land_type:...
+        sourceID={SOURCE_ID}
+        sourceLayerID={SOURCE_LAYER}
         style={{
-          fillColor: [
-            "match",
-            ["get", "ENGLISH_NAME"], // ← property name is UPPERCASE in your tiles
-            "",
-            "red",
-            "#CCC",
-          ],
-          fillOpacity: 0.35,
+          visibility: visible ? "visible" : "none",
+          fillColor: "#f59e0b",
+          fillOpacity: 0.2,
         }}
-        minZoomLevel={minZoom}
-        maxZoomLevel={maxZoom}
+        aboveLayerID={aboveLayerID}
+        belowLayerID={belowLayerID}
       />
-
       <LineLayer
         id="fn-outline"
-        sourceID="fn"
-        sourceLayerID="fn"
-        style={{ lineColor: "#404040", lineWidth: 0.5, lineOpacity: 0.7 }}
-        minZoomLevel={minZoom}
-        maxZoomLevel={maxZoom}
-      />
-      {/* Labels */}
-      <SymbolLayer
-        id="fn-label"
-        sourceID="fn"
-        sourceLayerID="fn"
-        minZoomLevel={7} // show labels from z7+ (tweak as you like)
-        maxZoomLevel={22}
+        sourceID={SOURCE_ID}
+        sourceLayerID={SOURCE_LAYER}
         style={{
-          symbolPlacement: "point",
-          textField: ["get", "ENGLISH_NAME"], // field is UPPERCASE in your tiles
-          textTransform: "uppercase",
-          textSize: ["interpolate", ["linear"], ["zoom"], 7, 10, 12, 14],
-          textColor: "#111",
-          textFont: ["Noto Sans Regular"],
-          textHaloColor: "#ffffff",
-          textHaloWidth: 1.2,
-          textAllowOverlap: false,
-          textIgnorePlacement: false,
-          textOptional: true,
-          textRadialOffset: 0.2,
+          visibility: visible ? "visible" : "none",
+          lineColor: "#b45309",
+          lineWidth: 0.8,
+          lineOpacity: 0.9,
         }}
+        aboveLayerID={aboveLayerID}
+        belowLayerID={belowLayerID}
       />
-    </VectorSource>
+            <SymbolLayer
+              id="fn-label"
+              sourceID={SOURCE_ID}
+              sourceLayerID={SOURCE_LAYER}
+              minZoomLevel={0} // show labels from z7+ (tweak as you like)
+              maxZoomLevel={22}
+              style={{
+                visibility: visible ? "visible" : "none",
+                symbolPlacement: "point",
+                textField: ["get", "BAND_NAME"], // field is UPPERCASE in your tiles
+                textTransform: "uppercase",
+                textSize: ["interpolate", ["linear"], ["zoom"], 7, 10, 12, 14],
+                textColor: "#111",
+                textFont: ["Noto Sans Regular"],
+                textHaloColor: "#ffffff",
+                textHaloWidth: 1.2,
+                textAllowOverlap: false,
+                textIgnorePlacement: false,
+                textOptional: true,
+                textRadialOffset: 0.2,
+              }}
+            />
+    </>
   );
 }

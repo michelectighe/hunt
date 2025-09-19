@@ -1,60 +1,53 @@
-// src/components/map/PublicLandLayer.js
+// src/components/map/LakesLayer.js
 import React from "react";
-import {
-  VectorSource,
-  FillLayer,
-  LineLayer,
-  SymbolLayer,
-} from "@maplibre/maplibre-react-native";
+import { FillLayer, LineLayer, SymbolLayer } from "@maplibre/maplibre-react-native";
 
 export default function LakesLayer({
   visible = true,
-  minZoom = 0,
-  maxZoom = 22,
+  aboveLayerID,
+  belowLayerID,
 }) {
-  if (!visible) return null;
+ // if (!visible) return null;
+
+  const SOURCE_ID = "lakes-src"; // must match offline-basic.json
+  const SOURCE_LAYER = "lakes"; // confirm this is the internal layer name
 
   return (
-    <VectorSource
-      id="lakes"
-      tileUrlTemplates={["asset://tiles/lakes/{z}/{x}/{y}.pbf"]}
-      minZoomLevel={0}
-      maxZoomLevel={22}
-    >
+    <>
       <FillLayer
         id="lakes-fill"
-        sourceID="lakes"
-        sourceLayerID="lakes" // ← matches tippecanoe -L land_type:...
+        visibility={visible}
+        sourceID={SOURCE_ID}
+        sourceLayerID={SOURCE_LAYER}
         style={{
-          fillColor: [
-            "match",
-            ["get", "LAKE_NAME"], // ← property name is UPPERCASE in your tiles
-            "",
-            "blue",
-            "blue",
-          ],
+          visibility: visible ? "visible" : "none",
+          fillColor: "#4fa3ff",
           fillOpacity: 0.35,
         }}
-        minZoomLevel={minZoom}
-        maxZoomLevel={maxZoom}
+        aboveLayerID={aboveLayerID}
+        belowLayerID={belowLayerID}
       />
-
       <LineLayer
         id="lakes-outline"
-        sourceID="lakes"
-        sourceLayerID="lakes"
-        style={{ lineColor: "#404040", lineWidth: 0.5, lineOpacity: 0.7 }}
-        minZoomLevel={minZoom}
-        maxZoomLevel={maxZoom}
+        sourceID={SOURCE_ID}
+        sourceLayerID={SOURCE_LAYER}
+        style={{
+          visibility: visible ? "visible" : "none",
+          lineColor: "#1d78d6",
+          lineWidth: 0.6,
+          lineOpacity: 0.9,
+        }}
+        aboveLayerID={aboveLayerID}
+        belowLayerID={belowLayerID}
       />
-      {/* Labels */}
       <SymbolLayer
         id="lakes-label"
-        sourceID="lakes"
-        sourceLayerID="lakes"
+        sourceID={SOURCE_ID}
+        sourceLayerID={SOURCE_LAYER}
         minZoomLevel={0} // show labels from z7+ (tweak as you like)
         maxZoomLevel={22}
         style={{
+          visibility: visible ? "visible" : "none",
           symbolPlacement: "point",
           textField: ["get", "LAKE_NAME"], // field is UPPERCASE in your tiles
           textTransform: "uppercase",
@@ -69,6 +62,6 @@ export default function LakesLayer({
           textRadialOffset: 0.2,
         }}
       />
-    </VectorSource>
+    </>
   );
 }

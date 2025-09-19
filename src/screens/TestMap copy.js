@@ -13,7 +13,7 @@ import synopsisByUnit from "../../assets/data/synopsis_regions_3_4_8.json";
 import RegionsLayer from "../components/map/RegionsLayer";
 import UnitsLayer from "../components/map/UnitsLayer";
  import HillshadeLayer from "../components/map/HillshadeLayer";
-import PrivateLandLayer from "../components/map/PrivateLandLayer";
+import PrivateLandLayer from "../components/map/PublicLandLayer";
 import FirstNationsLayer from "../components/map/FirstNationsLayer";
 import LakesLayer from "../components/map/LakesLayer";
 import RiversLayer from "../components/map/RiversLayer";

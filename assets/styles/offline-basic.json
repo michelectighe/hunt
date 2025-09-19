@@ -1,9 +1,33 @@
 {
   "version": 8,
   "name": "offline-basic",
-  "sources": {},
-   "text-font": ["Noto Sans Regular"],
-"glyphs": "asset://glyphs/{fontstack}/{range}.pbf",
+  "glyphs": "asset://glyphs/{fontstack}/{range}.pbf",
+  "sources": {
+    "rivers-src": {
+      "type": "vector",
+      "tiles": ["asset://tiles/rivers/{z}/{x}/{y}.pbf"],
+      "minzoom": 0,
+      "maxzoom": 14
+    },
+    "lakes-src": {
+      "type": "vector",
+      "tiles": ["asset://tiles/lakes/{z}/{x}/{y}.pbf"],
+      "minzoom": 0,
+      "maxzoom": 14
+    },
+    "fown-src": {
+      "type": "vector",
+      "tiles": ["asset://tiles/fown/{z}/{x}/{y}.pbf"],
+      "minzoom": 0,
+      "maxzoom": 14
+    },
+    "fn-src": {
+      "type": "vector",
+      "tiles": ["asset://tiles/fn/{z}/{x}/{y}.pbf"],
+      "minzoom": 0,
+      "maxzoom": 14
+    }
+  },
   "layers": [
     {
       "id": "background",

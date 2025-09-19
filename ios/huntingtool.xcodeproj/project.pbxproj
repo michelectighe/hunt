@@ -14,6 +14,7 @@
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		CD4850AC2E67EBD800CBA134 /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = C5B7DFCFAB5BFC314FECDEBC /* MapLibre */; };
 		CD4850B42E67F07400CBA134 /* glyphs in Resources */ = {isa = PBXBuildFile; fileRef = CD4850B32E67F07400CBA134 /* glyphs */; };
+		CD7EE5FD2E7C974A0095422F /* tiles in Resources */ = {isa = PBXBuildFile; fileRef = CD7EE5FC2E7C974A0095422F /* tiles */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 		F21600402A6BE49BA08AF82D /* libPods-huntingtool.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33810F817C44259D01FDD515 /* libPods-huntingtool.a */; };
 /* End PBXBuildFile section */
@@ -30,6 +31,7 @@
 		BFD7E31A794B530C3C7BEB91 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-huntingtool/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		CD4850AD2E67EC2800CBA134 /* ios_bundle_marker.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = ios_bundle_marker.txt; path = ../assets/ios_bundle_marker.txt; sourceTree = "<group>"; };
 		CD4850B32E67F07400CBA134 /* glyphs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = glyphs; path = ../assets/glyphs; sourceTree = "<group>"; };
+		CD7EE5FC2E7C974A0095422F /* tiles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tiles; path = ../assets/tiles; sourceTree = "<group>"; };
 		CDB0F1012E6D1FA300C0EFC6 /* tiles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tiles; path = ../assets/tiles; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = huntingtool/AppDelegate.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				CDB0F1012E6D1FA300C0EFC6 /* tiles */,
+				CD7EE5FC2E7C974A0095422F /* tiles */,
 				CD4850B32E67F07400CBA134 /* glyphs */,
 				CD4850AD2E67EC2800CBA134 /* ios_bundle_marker.txt */,
 				13B07FAE1A68108700A75B9A /* huntingtool */,
@@ -208,6 +211,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD7EE5FD2E7C974A0095422F /* tiles in Resources */,
 				CD4850B42E67F07400CBA134 /* glyphs in Resources */,
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
