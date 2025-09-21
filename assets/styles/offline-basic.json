@@ -7,25 +7,25 @@
       "type": "vector",
       "tiles": ["asset://tiles/rivers/{z}/{x}/{y}.pbf"],
       "minzoom": 0,
-      "maxzoom": 14
+      "maxzoom": 12
     },
     "lakes-src": {
       "type": "vector",
       "tiles": ["asset://tiles/lakes/{z}/{x}/{y}.pbf"],
       "minzoom": 0,
-      "maxzoom": 14
+      "maxzoom": 12
     },
     "fown-src": {
       "type": "vector",
       "tiles": ["asset://tiles/fown/{z}/{x}/{y}.pbf"],
       "minzoom": 0,
-      "maxzoom": 14
+      "maxzoom": 12
     },
     "fn-src": {
       "type": "vector",
       "tiles": ["asset://tiles/fn/{z}/{x}/{y}.pbf"],
       "minzoom": 0,
-      "maxzoom": 14
+      "maxzoom": 12
     }
   },
   "layers": [

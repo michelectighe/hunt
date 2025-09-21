@@ -6,7 +6,6 @@ export default function HillshadeLayer({
   visible = true,
   opacity = 0.55,
   minZoom = 4,
-  maxZoom = 22,
 }) {
   if (!visible) return null;
 
@@ -19,7 +18,6 @@ export default function HillshadeLayer({
       tileUrlTemplates={["asset://tiles/hillshade/{z}/{x}/{y}.png"]}
       tileSize={256}
       minZoomLevel={5}
-      maxZoomLevel={12}
     >
       <RasterLayer
         id="hillshade-layer"

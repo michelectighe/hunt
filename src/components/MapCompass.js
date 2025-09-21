@@ -1,21 +1,18 @@
+// src/components/MapCompass.js
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import MapView from "react-native-maps";
 import * as Location from "expo-location";
 
-type Props = {
-  mapRef: React.RefObject<MapView | null>;
-  style?: object;
-};
-
-export const MapCompass: React.FC<Props> = ({ mapRef, style }) => {
+export default function MapCompass({ cameraRef, style }) {
   const [heading, setHeading] = useState(0); // 0..360
   const [follow, setFollow] = useState(false); // follow device heading
+  const [valid, setValid] = useState(false); // is the heading usable?
 
   useEffect(() => {
-    let sub: Location.LocationSubscription | null = null;
+    let sub = null;
+
     (async () => {
-      // try to ensure we have permission (usually already granted in your app)
+      // Request foreground location (compass piggybacks on this)
       const perm = await Location.getForegroundPermissionsAsync();
       if (perm.status !== "granted") {
         const req = await Location.requestForegroundPermissionsAsync();
@@ -23,24 +20,38 @@ export const MapCompass: React.FC<Props> = ({ mapRef, style }) => {
       }
 
       sub = await Location.watchHeadingAsync((h) => {
-        const deg =
-          (Number.isFinite(h.trueHeading) && h.trueHeading >= 0
-            ? h.trueHeading
-            : h.magHeading) ?? 0;
-        setHeading(deg);
+        // On iOS, trueHeading === -1 when not yet calibrated/available
+        const hasTrue = Number.isFinite(h.trueHeading) && h.trueHeading >= 0;
+        const hasMag = Number.isFinite(h.magHeading) && h.magHeading >= 0;
 
-        if (follow) {
-          mapRef.current?.animateCamera({ heading: deg }, { duration: 80 });
+        const deg = hasTrue ? h.trueHeading : hasMag ? h.magHeading : 0;
+        setHeading(deg);
+        setValid(hasTrue || hasMag);
+
+        if (follow && cameraRef?.current) {
+          cameraRef.current.setCamera({
+            heading: deg,
+            animationDuration: 80,
+            animationMode: "easeTo",
+          });
         }
       });
     })();
 
-    return () => sub?.remove();
-  }, [follow, mapRef]);
+    return () => {
+      try {
+        sub && sub.remove && sub.remove();
+      } catch {}
+    };
+  }, [follow, cameraRef]);
 
   const snapNorth = () => {
     setFollow(false);
-    mapRef.current?.animateCamera({ heading: 0 }, { duration: 250 });
+    cameraRef?.current?.setCamera({
+      heading: 0,
+      animationDuration: 250,
+      animationMode: "easeTo",
+    });
   };
 
   return (
@@ -50,31 +61,31 @@ export const MapCompass: React.FC<Props> = ({ mapRef, style }) => {
       onLongPress={() => setFollow((v) => !v)}
       style={[styles.wrap, style]}
     >
-      {/* dial */}
-      <View style={styles.dial}>
-        {/* N marker */}
+      <View
+        style={[
+          styles.dial,
+          { transform: [{ rotate: `${-heading}deg` }] }, // rotate the card
+        ]}
+      >
         <Text style={styles.nMark}>N</Text>
-        {/* needle -> rotate to device heading */}
-        <View
-          style={[styles.needle, { transform: [{ rotate: `${heading}deg` }] }]}
-        >
+        {/* Needle stays pointing up, no rotation */}
+        <View style={styles.needle}>
           <View style={styles.needleTip} />
         </View>
       </View>
 
       <Text style={styles.meta}>
-        {Math.round(heading)}°{follow ? " • AUTO" : ""}
+        {valid ? Math.round(heading) + "°" : "CAL"}
+        {follow ? " • AUTO" : ""}
       </Text>
-      <Text style={styles.hint}>tap: north • long-press: follow</Text>
     </TouchableOpacity>
   );
-};
+}
 
 const styles = StyleSheet.create({
   wrap: {
     position: "absolute",
-    //  right: 12,
-    top: 60, // tuck under your COORD button
+    top: 60,
     alignSelf: "center",
     alignItems: "center",
     zIndex: 3,
@@ -107,7 +118,6 @@ const styles = StyleSheet.create({
     height: 16,
     borderRadius: 1,
     backgroundColor: "#3a6d55",
-    // little triangular cap:
     borderTopLeftRadius: 1,
     borderTopRightRadius: 1,
   },

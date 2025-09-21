@@ -75,9 +75,9 @@ export const EditPinModal: React.FC<EditPinModalProps> = ({
                         {pin.moonPhase}
                       </Text>
                     )}
-                    <Text style={styles.modalSub}>
+                    {/* <Text style={styles.modalSub}>
                       Land: {pin.own.toUpperCase()}
-                    </Text>
+                    </Text> */}
 
                     <Text style={styles.modalCoords}>
                       {pin.lat.toFixed(5)}, {pin.lon.toFixed(5)}

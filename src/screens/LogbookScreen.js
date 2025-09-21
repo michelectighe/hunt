@@ -62,8 +62,8 @@ export default function LogbookScreen() {
   const [refreshing, setRefreshing] = useState(false);
 
   const { species: speciesList } = useSpeciesCtx();
-  const [speciesFilter, setSpeciesFilter] = useState<Species | "all">("all");
-  const [moonFilter, setMoonFilter] = useState<MoonPhase | "all">("all");
+  const [speciesFilter, setSpeciesFilter] = useState();
+  const [moonFilter, setMoonFilter] = useState();
 
   async function load() {
     const rs = await getPins();
@@ -123,7 +123,7 @@ export default function LogbookScreen() {
             return (
               <View style={styles.row}>
                 <Text style={styles.rowMain}>
-                  {item.own.toUpperCase()} • {item.species.toUpperCase()} •{" "}
+                  {item.species.toUpperCase()} •{" "}
                   {new Date(item.ts).toLocaleString()}
                 </Text>
                 <Text style={styles.rowSub}>

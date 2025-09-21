@@ -1,6 +1,6 @@
 // File: src/index.js (optional barrel for cleaner imports)
 // ─────────────────────────────────────────────────────────────────────────────
-export { default as TestMap } from "./screens/TestMap";
+export { default as TestMap } from "./screens/MapScreen";
 export { default as RegionsLayer } from "./components/map/RegionsLayer";
 export { default as UnitsLayer } from "./components/map/UnitsLayer";
 export { default as SelectionPill } from "./components/SelectionPill";

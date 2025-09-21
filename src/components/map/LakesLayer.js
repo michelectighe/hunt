@@ -45,7 +45,6 @@ export default function LakesLayer({
         sourceID={SOURCE_ID}
         sourceLayerID={SOURCE_LAYER}
         minZoomLevel={0} // show labels from z7+ (tweak as you like)
-        maxZoomLevel={22}
         style={{
           visibility: visible ? "visible" : "none",
           symbolPlacement: "point",

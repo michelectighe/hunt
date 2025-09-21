@@ -35,28 +35,27 @@ export default function FirstNationsLayer({ visible = true, aboveLayerID, belowL
         aboveLayerID={aboveLayerID}
         belowLayerID={belowLayerID}
       />
-            <SymbolLayer
-              id="fn-label"
-              sourceID={SOURCE_ID}
-              sourceLayerID={SOURCE_LAYER}
-              minZoomLevel={0} // show labels from z7+ (tweak as you like)
-              maxZoomLevel={22}
-              style={{
-                visibility: visible ? "visible" : "none",
-                symbolPlacement: "point",
-                textField: ["get", "BAND_NAME"], // field is UPPERCASE in your tiles
-                textTransform: "uppercase",
-                textSize: ["interpolate", ["linear"], ["zoom"], 7, 10, 12, 14],
-                textColor: "#111",
-                textFont: ["Noto Sans Regular"],
-                textHaloColor: "#ffffff",
-                textHaloWidth: 1.2,
-                textAllowOverlap: false,
-                textIgnorePlacement: false,
-                textOptional: true,
-                textRadialOffset: 0.2,
-              }}
-            />
+      <SymbolLayer
+        id="fn-label"
+        sourceID={SOURCE_ID}
+        sourceLayerID={SOURCE_LAYER}
+        minZoomLevel={0} // show labels from z7+ (tweak as you like)
+        style={{
+          visibility: visible ? "visible" : "none",
+          symbolPlacement: "point",
+          textField: ["get", "BAND_NAME"], // field is UPPERCASE in your tiles
+          textTransform: "uppercase",
+          textSize: ["interpolate", ["linear"], ["zoom"], 7, 10, 12, 14],
+          textColor: "#111",
+          textFont: ["Noto Sans Regular"],
+          textHaloColor: "#ffffff",
+          textHaloWidth: 1.2,
+          textAllowOverlap: false,
+          textIgnorePlacement: false,
+          textOptional: true,
+          textRadialOffset: 0.2,
+        }}
+      />
     </>
   );
 }

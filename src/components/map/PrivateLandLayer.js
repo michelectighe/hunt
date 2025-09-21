@@ -1,16 +1,16 @@
-// src/components/map/PublicLandLayer.js
+// src/components/map/PrivateLandLayer.js
 import React from "react";
 import { FillLayer, LineLayer } from "@maplibre/maplibre-react-native";
 
-export default function PublicLandLayer({
+export default function PrivateLandLayer({
   visible = true,
   aboveLayerID,
   belowLayerID,
 }) {
  // if (!visible) return null;
-console.log("public visible:", visible);
+
   const SOURCE_ID = "fown-src";
-  const SOURCE_LAYER = "fown"; // confirm internal layer name
+  const SOURCE_LAYER = "fown"; 
 
   return (
     <>
@@ -19,15 +19,14 @@ console.log("public visible:", visible);
         sourceID={SOURCE_ID}
         sourceLayerID={SOURCE_LAYER}
         style={{
-          visibility: visible ? "visible" : "none",
-          fillColor: "#22c55e",
-          fillOpacity: 0.23,
+            fillColor: "#22c55e",
+            fillOpacity: visible ? 0.23 : 0.01,
         }}
         aboveLayerID={aboveLayerID}
         belowLayerID={belowLayerID}
       />
       <LineLayer
-        id="fown-outline"
+        id="private-outline"
         sourceID={SOURCE_ID}
         sourceLayerID={SOURCE_LAYER}
         style={{
